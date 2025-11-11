@@ -1,0 +1,63 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS 보안 프로젝트 (Node.js)</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; container-type: inline-size; max-width: 800px; margin: 20px auto; padding: 20px; background-color: #f7f9fc; color: #333; }
+        h1 { color: #0052cc; text-align: center; }
+        .container { background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        form { margin-bottom: 30px; }
+        div { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: 600; color: #555; }
+        input[type="text"], textarea { width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; }
+        input[type="submit"] { background-color: #007bff; color: white; padding: 12px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; transition: background-color 0.2s; }
+        input[type="submit"]:hover { background-color: #0056b3; }
+        h2 { border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        .entry { background: #fdfdfd; border: 1px solid #eee; padding: 15px; margin-bottom: 15px; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.03); }
+        .entry strong { color: #0056b3; }
+        .entry p { margin: 8px 0 0 0; word-wrap: break-word; }
+        .entry-meta { font-size: 0.9em; color: #777; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AWS 보안 프로젝트 방명록 (Node.js)</h1>
+        <p style="text-align: center; color: #555;">이 애플리케이션은 WAF, GuardDuty 등 보안 서비스 테스트를 위해 구축되었습니다.</p>
+
+        <form action="/" method="POST">
+            <div>
+                <label for="name">이름:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div>
+                <label for="message">메시지 (WAF 테스트용):</label>
+                <textarea id="message" name="message" rows="4" required></textarea>
+            </div>
+            <input type="submit" value="글 남기기">
+        </form>
+
+        <h2>방문 기록</h2>
+        <div id="entries">
+            <% if (entries.length > 0) { %>
+                <% entries.forEach(entry => { %>
+                    <div class="entry">
+                        <!-- 
+                          [중요] WAF XSS 테스트를 위해 EJS의 '이스케이프 처리되지 않은 출력' &lt;%- ... %&gt; 를 사용합니다.
+                          (일반적인 &lt;%= ... %&gt; 는 XSS 공격을 자동으로 방어합니다.)
+                          이 코드는 의도적으로 XSS에 취약하게 만들어 WAF가 차단하는지 테스트하기 위함입니다.
+                        -->
+                        <strong><%- entry.name %></strong>
+                        <span class="entry-meta">(<%= new Date(entry.created_at).toLocaleString('ko-KR') %>)</span>
+                        <p><%- entry.message %></p>
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <p>아직 등록된 글이 없습니다. 첫 번째 글을 남겨주세요!</p>
+            <% } %>
+        </div>
+    </div>
+</body>
+</html>
