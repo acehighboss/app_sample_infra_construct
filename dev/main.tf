@@ -71,3 +71,10 @@ module "instances" {
   db_password = var.db_password
   env         = local.env
 }
+
+module "security" {
+  source = "../security"
+  env    = local.env
+  # 아래 한 줄 추가 (본인 이메일로 변경)
+  notification_email = "security-admin@example.com"
+}
