@@ -60,3 +60,13 @@ resource "aws_lb_listener" "ex_lb_forward" {
     target_group_arn = aws_lb_target_group.ex_lb_tg.arn
   }
 }
+
+# WAF ACL(aws_wafv2_web_acl)과 기존 ALB(aws_lb)를 연결합니다.
+resource "aws_wafv2_web_acl_association" "ex_waf_assoc" {
+  
+  # 연결할 리소스(ALB)의 ARN
+  resource_arn = aws_lb.ex_lb.arn
+
+  # 연결할 WAF ACL의 ARN
+  web_acl_arn  = aws_wafv2_web_acl.ex_waf.arn
+}
